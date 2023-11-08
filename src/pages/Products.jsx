@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Button } from '@chakra-ui/react';
 import axios from 'axios';
+import EditForm from '../components/EditForm'; // Adjust the import path as necessary
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -19,8 +20,6 @@ const Products = () => {
         fetchProducts();
     }, []);
 
-    // Inside Products component
-
     const handleDelete = async (objectId) => {
         try {
             await axios.delete(`https://moneyedwren.backendless.app/api/data/products/${objectId}`);
@@ -34,23 +33,9 @@ const Products = () => {
         setSelectedProduct(product);
     };
 
-    // Update the Actions column in the renderTable function
-    <Td>
-        <Button size="sm" mr="2" onClick={() => handleEditClick(product)}>Edit</Button>
-        <Button size="sm" colorScheme="red" onClick={() => handleDelete(product.objectId)}>Delete</Button>
-    </Td>
-
-
-    // Inside Products component
-
     const closeEditForm = () => {
         setSelectedProduct(null);
     };
-
-    // Pass the onClose prop to the EditForm component
-    { selectedProduct ? <EditForm product={selectedProduct} onClose={closeEditForm} /> : renderTable() }
-
-    // Inside Products component, after the useEffect hook
 
     const renderTable = () => {
         return (
@@ -65,15 +50,15 @@ const Products = () => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {products.map(product => (
-                        <Tr key={product.objectId} onClick={() => setSelectedProduct(product)}>
+                    {products.map((product) => (
+                        <Tr key={product.objectId}>
                             <Td>{product.bank}</Td>
                             <Td>{product.name}</Td>
                             <Td>{product.type}</Td>
                             <Td isNumeric>{product.apr}</Td>
                             <Td>
-                                <Button size="sm" mr="2">Edit</Button>
-                                <Button size="sm" colorScheme="red">Delete</Button>
+                                <Button size="sm" mr="2" onClick={() => handleEditClick(product)}>Edit</Button>
+                                <Button size="sm" colorScheme="red" onClick={() => handleDelete(product.objectId)}>Delete</Button>
                             </Td>
                         </Tr>
                     ))}
@@ -84,10 +69,9 @@ const Products = () => {
 
     return (
         <Box p="4">
-            {selectedProduct ? <EditForm product={selectedProduct} /> : renderTable()}
+            {selectedProduct ? <EditForm product={selectedProduct} onClose={closeEditForm} /> : renderTable()}
         </Box>
     );
-
 };
 
 export default Products;

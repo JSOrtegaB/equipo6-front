@@ -1,55 +1,46 @@
-// src/components/EditForm.js
-import React, { useState } from 'react';
-import { Box, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
-import axios from 'axios';
+import React from 'react';
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Button,
+    FormControl,
+    FormLabel,
+    Input
+} from '@chakra-ui/react';
 
 const EditForm = ({ product, onClose }) => {
-    const [formData, setFormData] = useState({
-        bank: product.bank,
-        name: product.name,
-        type: product.type,
-        apr: product.apr,
-    });
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.put(`https://moneyedwren.backendless.app/api/data/products/${product.objectId}`, formData);
-            onClose(); // Close the form
-        } catch (error) {
-            console.error('Error updating product:', error);
-        }
-    };
+    // You will need to manage the form state and handle form submission
 
     return (
-        <Box p="4">
-            <form onSubmit={handleSubmit}>
-                <FormControl id="bank" isRequired>
-                    <FormLabel>Bank</FormLabel>
-                    <Input name="bank" value={formData.bank} onChange={handleChange} />
-                </FormControl>
-                <FormControl id="name" isRequired>
-                    <FormLabel>Name</FormLabel>
-                    <Input name="name" value={formData.name} onChange={handleChange} />
-                </FormControl>
-                <FormControl id="type">
-                    <FormLabel>Type</FormLabel>
-                    <Input name="type" value={formData.type} onChange={handleChange} />
-                </FormControl>
-                <FormControl id="apr" isRequired>
-                    <FormLabel>APR</FormLabel>
-                    <Input name="apr" type="number" value={formData.apr} onChange={handleChange} />
-                </FormControl>
-                <Button mt="4" colorScheme="blue" type="submit">Update Product</Button>
-            </form>
-        </Box>
+        <Modal isOpen={true} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Edit Product</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    {/* Your form fields will go here */}
+                    <FormControl>
+                        <FormLabel>Bank</FormLabel>
+                        <Input placeholder="Bank" defaultValue={product.bank} />
+                        {/* Repeat for other fields */}
+                    </FormControl>
+                </ModalBody>
+
+                <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        Close
+                    </Button>
+                    <Button variant="ghost">Save Changes</Button>
+                    {/* Add the functionality to save changes */}
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     );
 };
-
-
 
 export default EditForm;
