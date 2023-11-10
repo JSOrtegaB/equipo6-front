@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Button, IconButton, Spinner } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import EditForm from '../components/EditForm';
 import AddNewProductForm from '../components/AddNewProductForm';
 
@@ -20,7 +22,8 @@ const Products = () => {
                 setIsLoaded(false);
             } catch (error) {
                 setIsLoaded(false);
-                console.error('Error fetching products:', error);
+                console.error('Error cargando productos:', error);
+                toast.error('Error cargando productos');
             }
         };
 
@@ -32,7 +35,8 @@ const Products = () => {
             await axios.delete(`${process.env.REACT_APP_BASE_URL}/products/${objectId}`);
             setProducts(products.filter(product => product.objectId !== objectId));
         } catch (error) {
-            console.error('Error deleting product:', error);
+            console.error('Error borrando producto:', error);
+            toast.error('Error borrando producto');
         }
     };
 
@@ -114,6 +118,7 @@ const Products = () => {
             ) : (
                 isLoaded ? <Spinner size="xl" /> : renderTable()
             )}
+            <ToastContainer />
         </Box>
     );
 };
