@@ -42,30 +42,30 @@ const AddNewProductForm = ({ onClose, onProductAdded }) => {
         <Modal isOpen={true} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Add New Product</ModalHeader>
+                <ModalHeader>Agrega un nuevo Producto</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit}>
                     <ModalBody>
                         <FormControl isRequired>
-                            <FormLabel>Bank</FormLabel>
+                            <FormLabel>Banco</FormLabel>
                             <Input name="bank" value={newProduct.bank} onChange={handleChange} />
                         </FormControl>
                         <FormControl isRequired mt={4}>
-                            <FormLabel>Name</FormLabel>
+                            <FormLabel>Nombre</FormLabel>
                             <Input name="name" value={newProduct.name} onChange={handleChange} />
                         </FormControl>
                         <FormControl isRequired mt={4}>
-                            <FormLabel>Type</FormLabel>
+                            <FormLabel>Tipo</FormLabel>
                             <Input name="type" value={newProduct.type} onChange={handleChange} />
                         </FormControl>
                         <FormControl isRequired mt={4}>
-                            <FormLabel>APR</FormLabel>
+                            <FormLabel>CAT (Costo Anual Total)</FormLabel>
                             <Input name="apr" value={newProduct.apr} onChange={handleChange} />
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="blue" mr={3} type="submit">
-                            Add Product
+                            Agrega Producto
                         </Button>
                         <Button onClick={onClose}>Cancel</Button>
                     </ModalFooter>

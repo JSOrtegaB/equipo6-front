@@ -1,45 +1,45 @@
-import React from 'react';
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Button,
-    FormControl,
-    FormLabel,
-    Input
-} from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react';
+import axios from 'axios';
 
 const EditForm = ({ product, onClose }) => {
-    // You will need to manage the form state and handle form submission
+    const [editedProduct, setEditedProduct] = useState({ ...product });
+
+    const handleChange = (e) => {
+        setEditedProduct({ ...editedProduct, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.put(`https://moneyedwren.backendless.app/api/data/products/${editedProduct.objectId}`, { bank: editedProduct.bank, name: editedProduct.name, type: editedProduct.type, apr: parseInt(editedProduct.apr) });
+            console.log(response.data);
+            onClose(); // close the form upon successful edit
+        } catch (error) {
+            console.error('Error updating product:', error);
+        }
+    };
 
     return (
-        <Modal isOpen={true} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Edit Product</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    {/* Your form fields will go here */}
-                    <FormControl>
-                        <FormLabel>Bank</FormLabel>
-                        <Input placeholder="Bank" defaultValue={product.bank} />
-                        {/* Repeat for other fields */}
-                    </FormControl>
-                </ModalBody>
-
-                <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onClose}>
-                        Close
-                    </Button>
-                    <Button variant="ghost">Save Changes</Button>
-                    {/* Add the functionality to save changes */}
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
+        <Box p="4">
+            <FormControl id="bank" mb="4">
+                <FormLabel>Bank</FormLabel>
+                <Input name="bank" type="text" value={editedProduct.bank} onChange={handleChange} />
+            </FormControl>
+            <FormControl id="name" mb="4">
+                <FormLabel>Name</FormLabel>
+                <Input name="name" type="text" value={editedProduct.name} onChange={handleChange} />
+            </FormControl>
+            <FormControl id="type" mb="4">
+                <FormLabel>Type</FormLabel>
+                <Input name="type" type="text" value={editedProduct.type} onChange={handleChange} />
+            </FormControl>
+            <FormControl id="apr" mb="4">
+                <FormLabel>APR</FormLabel>
+                <Input name="apr" type="number" value={editedProduct.apr} onChange={handleChange} />
+            </FormControl>
+            <Button colorScheme="blue" mr="4" onClick={handleSubmit}>Save</Button>
+            <Button onClick={onClose}>Cancel</Button>
+        </Box>
     );
 };
 

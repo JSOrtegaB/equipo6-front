@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Button, IconButton } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import axios from 'axios';
-import EditForm from '../components/EditForm'; // Ensure this is the correct path to your EditForm
-import AddNewProductForm from '../components/AddNewProductForm'; // Ensure this is the correct path to your AddNewProductForm
+import EditForm from '../components/EditForm';
+import AddNewProductForm from '../components/AddNewProductForm';
 
 const Products = () => {
     const [products, setProducts] = useState([]);

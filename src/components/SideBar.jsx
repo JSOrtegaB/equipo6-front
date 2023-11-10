@@ -6,10 +6,10 @@ const Sidebar = () => {
     return (
         <Box position="fixed" left="0" p="5" w="200px" h="100vh">
             <Stack spacing="4">
-                <Link as={RouterLink} to="/start">Home</Link>
-                <Link as={RouterLink} to="/products">Products</Link>
-                <Link as={RouterLink} to="/sim">Simulations</Link>
-                <Link as={RouterLink} to="/reports">Reports</Link>
+                <Link as={RouterLink} to="/start">Inicio</Link>
+                <Link as={RouterLink} to="/products">Productos Financieros</Link>
+                <Link as={RouterLink} to="/sim">Simulaciones</Link>
+                <Link as={RouterLink} to="/reports">Reportes</Link>
             </Stack>
         </Box>
     );
