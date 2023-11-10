@@ -3,14 +3,14 @@ import { Box, Flex } from '@chakra-ui/react';
 import Sidebar from '../components/SideBar';
 
 const Home = () => {
-    return (
-        <Flex>
-            <Sidebar />
-            <Box ml="200px"> {/* Content should start after the sidebar */}
-                Home Page Content
-            </Box>
-        </Flex>
-    );
+  return (
+    <Flex>
+      <Sidebar />
+      <Box ml="200px"> {/* Content should start after the sidebar */}
+        Pagina de Inicio
+      </Box>
+    </Flex>
+  );
 };
 
 export default Home;

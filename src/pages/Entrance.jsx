@@ -10,9 +10,9 @@ const Entrance = () => {
         <Center h="100vh" flexDirection="column">
             <Image src={logo} boxSize="150px" />
             <Text fontSize="xl" my="4">
-                Welcome to My App
+                Bienvenido a Ratio, el portal de finanzas personales
             </Text>
-            <Button onClick={() => navigate('/start')}>Enter</Button>
+            <Button onClick={() => navigate('/start')}>Entrar</Button>
         </Center>
     );
 };

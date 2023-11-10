@@ -15,11 +15,9 @@ import {
   Grid,
   theme,
 } from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Logo } from './Logo';
 import Home from './pages/Home';
 import Products from './pages/Products';
-import Simulations from './pages/Simulations';
+//import Simulations from './pages/Simulations';
 import Reports from './pages/Reports';
 import Entrance from './pages/Entrance';
 
@@ -31,8 +29,8 @@ function App() {
           <Route path="/" element={<Entrance />} />
           <Route path="/start" element={<Home />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/sim" element={<Simulations />} />
-          <Route path="/reports" element={<Reports />} />
+          {/* <Route path="/sim" element={<Simulations />} /> */}
+          {/* <Route path="/reports" element={<Reports />} /> */}
         </Routes>
       </Router>
     </ChakraProvider>
