@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Button, IconButton } from '@chakra-ui/react';
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Button, IconButton, Spinner } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import EditForm from '../components/EditForm';
@@ -9,13 +9,17 @@ const Products = () => {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isAddingNew, setIsAddingNew] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const fetchProducts = async () => {
+            setIsLoaded(true);
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/products`);
                 setProducts(response.data);
+                setIsLoaded(false);
             } catch (error) {
+                setIsLoaded(false);
                 console.error('Error fetching products:', error);
             }
         };
@@ -25,7 +29,7 @@ const Products = () => {
 
     const handleDelete = async (objectId) => {
         try {
-            await axios.delete(`https://moneyedwren.backendless.app/api/data/products/${objectId}`);
+            await axios.delete(`${process.env.REACT_APP_BASE_URL}/products/${objectId}`);
             setProducts(products.filter(product => product.objectId !== objectId));
         } catch (error) {
             console.error('Error deleting product:', error);
@@ -34,6 +38,19 @@ const Products = () => {
 
     const handleEditClick = (product) => {
         setSelectedProduct(product);
+    };
+
+    const onSaveEditData = (editedProduct) => {
+        const updatedProducts = products.map(product => {
+            if (product.objectId === editedProduct.objectId) {
+                return editedProduct;
+            }
+
+            return product;
+        });
+
+        setProducts(updatedProducts);
+        setSelectedProduct(null);
     };
 
     const closeEditForm = () => {
@@ -93,9 +110,9 @@ const Products = () => {
             {isAddingNew ? (
                 <AddNewProductForm onClose={closeAddForm} onProductAdded={onProductAdded} />
             ) : selectedProduct ? (
-                <EditForm product={selectedProduct} onClose={closeEditForm} />
+                <EditForm product={selectedProduct} onSaveEditData={onSaveEditData} onClose={closeEditForm} />
             ) : (
-                renderTable()
+                isLoaded ? <Spinner size="xl" /> : renderTable()
             )}
         </Box>
     );

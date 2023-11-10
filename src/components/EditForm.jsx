@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react';
 import axios from 'axios';
 
-const EditForm = ({ product, onClose }) => {
+const EditForm = ({ product, onClose, onSaveEditData }) => {
     const [editedProduct, setEditedProduct] = useState({ ...product });
 
     const handleChange = (e) => {
@@ -14,6 +14,7 @@ const EditForm = ({ product, onClose }) => {
             const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/products/${editedProduct.objectId}`,
                 { bank: editedProduct.bank, name: editedProduct.name, type: editedProduct.type, apr: parseInt(editedProduct.apr) });
             console.log(response.data);
+            onSaveEditData(response.data);
             onClose(); // close the form upon successful edit
         } catch (error) {
             console.error('Error updating product:', error);

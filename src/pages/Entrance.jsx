@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text, Image, Center, Button } from '@chakra-ui/react';
+import { Text, Image, Center, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logoRatio.png';
 
