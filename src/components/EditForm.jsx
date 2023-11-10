@@ -11,7 +11,8 @@ const EditForm = ({ product, onClose }) => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.put(`https://moneyedwren.backendless.app/api/data/products/${editedProduct.objectId}`, { bank: editedProduct.bank, name: editedProduct.name, type: editedProduct.type, apr: parseInt(editedProduct.apr) });
+            const response = await axios.put(`https://moneyedwren.backendless.app/api/data/products/${editedProduct.objectId}`,
+                { bank: editedProduct.bank, name: editedProduct.name, type: editedProduct.type, apr: parseInt(editedProduct.apr) });
             console.log(response.data);
             onClose(); // close the form upon successful edit
         } catch (error) {

@@ -5,7 +5,6 @@ import Sidebar from '../components/SideBar';
 const Home = () => {
   return (
     <Flex>
-      <Sidebar />
       <Box ml="200px"> {/* Content should start after the sidebar */}
         Pagina de Inicio
       </Box>

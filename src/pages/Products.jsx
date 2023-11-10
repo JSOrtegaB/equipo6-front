@@ -57,11 +57,11 @@ const Products = () => {
         <Table variant="simple">
             <Thead>
                 <Tr>
-                    <Th>Bank</Th>
-                    <Th>Name</Th>
-                    <Th>Type</Th>
-                    <Th isNumeric>APR</Th>
-                    <Th>Actions</Th>
+                    <Th>Banco</Th>
+                    <Th>Nombre</Th>
+                    <Th>Tipo</Th>
+                    <Th isNumeric>CAT</Th>
+                    <Th>Acciones</Th>
                 </Tr>
             </Thead>
             <Tbody>
@@ -72,8 +72,8 @@ const Products = () => {
                         <Td>{product.type}</Td>
                         <Td isNumeric>{product.apr}</Td>
                         <Td>
-                            <Button size="sm" mr="2" onClick={() => handleEditClick(product)}>Edit</Button>
-                            <Button size="sm" colorScheme="red" onClick={() => handleDelete(product.objectId)}>Delete</Button>
+                            <Button size="sm" mr="2" onClick={() => handleEditClick(product)}>Editar</Button>
+                            <Button size="sm" colorScheme="red" onClick={() => handleDelete(product.objectId)}>Borrar</Button>
                         </Td>
                     </Tr>
                 ))}
