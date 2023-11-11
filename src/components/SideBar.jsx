@@ -9,6 +9,7 @@ const Sidebar = () => {
                 <Link as={RouterLink} to="/start">Inicio</Link>
                 <Link as={RouterLink} to="/products">Productos Financieros</Link>
                 <Link as={RouterLink} to="/sim">Simulaciones</Link>
+                <Link as={RouterLink} to="/sim-table">Simulaciones Guardadas</Link>
                 <Link as={RouterLink} to="/reports">Reportes</Link>
             </Stack>
         </Box>

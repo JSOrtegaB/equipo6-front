@@ -79,6 +79,7 @@ const Simulations = () => {
             monthly_rate: simulation.monthlyPayment,
             product: simulation.name,
             bank: simulation.bank,
+            apr: simulation.apr,
             user: user ? user : "anonimo"
         }
         console.log(body);
