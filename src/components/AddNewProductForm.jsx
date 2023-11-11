@@ -29,8 +29,9 @@ const AddNewProductForm = ({ onClose, onProductAdded }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("lo que se envia", newProduct);
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/products`, { ...newProduct, apr: parseInt(newProduct.apr) });
+            const body = { ...newProduct, apr: parseFloat(newProduct.apr) };
+            console.log("lo que se envia", body);
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/products`, body);
             onProductAdded(response.data); // Update the product list in parent component
             onClose(); // Close the modal
         } catch (error) {
