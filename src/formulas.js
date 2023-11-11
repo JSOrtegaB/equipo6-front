@@ -4,7 +4,6 @@ const calculatePayments = (products, amount, period) => {
 
     return filteredProducts.map(product => {
 
-
         const monthlyRate = product.apr / 1200; // Convert APR to a monthly rate
         const totalPayments = period; // Total number of monthly payments
         const presentValue = amount; // Loan amount
@@ -27,17 +26,18 @@ const calculateEarnings = (products, amount, period) => {
         const totalMonths = period; // Total number of months
 
         // Calculate the future value using the compound interest formula
-        const futureValue = amount * Math.pow(1 + monthlyRate, totalMonths);
+        //const futureValue = amount * Math.pow(1 + monthlyRate, totalMonths);
 
         // Calculate interest earned by subtracting principal from future value
-        const interestEarned = futureValue - amount;
+        const interestEarned = interestEarnedFormula(amount, monthlyRate, totalMonths);
+        // = futureValue - amount;
 
         return { ...product, monthlyPayment: isNaN(interestEarned) ? 0 : interestEarned };
     });
 };
 
 const monthlyPaymentFormula = (monthlyRate, totalPayments, presentValue) => monthlyRate * presentValue / (1 - Math.pow(1 + monthlyRate, -totalPayments));
-//const futureValueFormula = (amount, monthlyRate, totalMonths) => amount * Math.pow(1 + monthlyRate, totalMonths); = amount * Math.pow(1 + monthlyRate, totalMonths);
+const interestEarnedFormula = (amount, monthlyRate, totalMonths) => amount * Math.pow(1 + monthlyRate, totalMonths) - amount;
 
 
-export { calculatePayments, calculateEarnings, monthlyPaymentFormula };
+export { calculatePayments, calculateEarnings, monthlyPaymentFormula, interestEarnedFormula };

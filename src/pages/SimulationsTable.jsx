@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td, Button, Box, Input } from '@chakra-ui/react';
 import axios from 'axios';
+import { monthlyPaymentFormula, interestEarnedFormula } from '../formulas';
 
 const SimulationsTable = () => {
     const [simulations, setSimulations] = useState([]);
@@ -18,10 +19,6 @@ const SimulationsTable = () => {
         fetchSimulations();
     }, []);
 
-    const handleEdit = (simulationObjId) => {
-        console.log('Edit simulation with ID:', simulationObjId);
-    };
-
     const handleDelete = async (simulationObjId) => {
         try {
             await axios.delete(`${process.env.REACT_APP_BASE_URL}/simulations/${simulationObjId}`);
@@ -37,6 +34,7 @@ const SimulationsTable = () => {
                 return {
                     ...simulation,
                     amount: event.target.value,
+                    monthly_rate: monthlyPaymentFormula(simulation.apr, simulation.amount, simulation.period),
                 };
             } else {
                 return simulation;
@@ -51,6 +49,7 @@ const SimulationsTable = () => {
                 return {
                     ...simulation,
                     period: event.target.value,
+                    monthly_rate: monthlyPaymentFormula(simulation.apr, simulation.amount, simulation.period),
                 };
             } else {
                 return simulation;
