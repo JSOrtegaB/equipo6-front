@@ -60,8 +60,17 @@ const SimulationsTable = () => {
     };
 
     const handleSave = async (simulation) => {
+        const body = {
+            apr: parseFloat(simulation.apr),
+            amount: parseInt(simulation.amount),
+            product: simulation.product,
+            period: parseInt(simulation.period),
+            type: simulation.type,
+            monthly_rate: parseFloat(simulation.monthly_rate),
+            bank: simulation.bank,
+        };
         try {
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/simulations/${simulation.objectId}`, simulation);
+            await axios.put(`${process.env.REACT_APP_BASE_URL}/simulations/${simulation.objectId}`, body);
         } catch (error) {
             console.error('Error updating simulation:', error);
         }
