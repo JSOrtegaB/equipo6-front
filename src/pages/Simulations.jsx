@@ -4,10 +4,11 @@ import axios from 'axios';
 
 const Simulations = () => {
     const [products, setProducts] = useState([]);
-    const [type, setType] = useState('credit');
+    const [type, setType] = useState('credito');
     const [amount, setAmount] = useState('');
     const [period, setPeriod] = useState('');
     const [simulations, setSimulations] = useState([]);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         // Fetch products initially
@@ -38,20 +39,52 @@ const Simulations = () => {
         });
     };
 
+    const calculateEarnings = () => {
+        // Filter products where type is 'invest'
+        const filteredProducts = products.filter(product => product.type === 'inversion');
+
+        return filteredProducts.map(product => {
+            const monthlyRate = product.apr / 1200; // Convert APR to a monthly rate
+            const totalMonths = period; // Total number of months
+
+            // Calculate the future value using the compound interest formula
+            const futureValue = amount * Math.pow(1 + monthlyRate, totalMonths);
+
+            // Calculate interest earned by subtracting principal from future value
+            const interestEarned = futureValue - amount;
+
+            return { ...product, monthlyPayment: isNaN(interestEarned) ? 0 : interestEarned };
+        });
+    };
+
+
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (type === 'credit') {
+        if (type === 'credito') {
             const calculatedSimulations = calculatePayments();
             setSimulations(calculatedSimulations);
-        }        // For investments, add your calculation logic
+        } else {
+            console.log("Entro a calcular inversion");
+            const calculateEarningspayments = calculateEarnings();
+            setSimulations(calculateEarningspayments);
+        }
     };
 
     const handleSave = async (simulation) => {
+        const body = {
+            period, amount,
+            type,
+            monthly_rate: simulation.monthlyPayment,
+            product: simulation.name,
+            bank: simulation.bank,
+            user: user ? user : "anonimo"
+        }
+        console.log(body);
         try {
-            await axios.post('https://your-api-url/simulation', simulation);
-            // Handle post success (e.g., show message or update state)
+            const result = await axios.post(`${process.env.REACT_APP_BASE_URL}/simulations`, body);
+            console.log(result);
         } catch (error) {
             console.error('Error saving simulation:', error);
         }
@@ -61,31 +94,31 @@ const Simulations = () => {
         <Box p="4">
             <form onSubmit={handleSubmit}>
                 <FormControl isRequired>
-                    <FormLabel>Type</FormLabel>
+                    <FormLabel>Tipo</FormLabel>
                     <Select onChange={(e) => setType(e.target.value)}>
                         <option value="credito">Credito</option>
                         <option value="inversion">Inversion</option>
                     </Select>
                 </FormControl>
                 <FormControl isRequired mt="4">
-                    <FormLabel>Amount</FormLabel>
+                    <FormLabel>Cantidad</FormLabel>
                     <Input type="number" onChange={(e) => setAmount(parseFloat(e.target.value))} />
                 </FormControl>
                 <FormControl isRequired mt="4">
-                    <FormLabel>Period (Months)</FormLabel>
+                    <FormLabel>Periodo (Meses)</FormLabel>
                     <Input type="number" onChange={(e) => setPeriod(parseInt(e.target.value, 10))} />
                 </FormControl>
-                <Button mt="4" type="submit">Calculate</Button>
+                <Button mt="4" type="submit">Calcular</Button>
             </form>
             {simulations.length > 0 && (
                 <Table variant="simple" mt="6">
                     <Thead>
                         <Tr>
-                            <Th>Bank</Th>
-                            <Th>Name</Th>
-                            <Th>APR</Th>
-                            <Th>Monthly Payment</Th>
-                            <Th>Action</Th>
+                            <Th>Banco</Th>
+                            <Th>Producto</Th>
+                            <Th>{type === "credito" ? "CAT" : "Interes"}</Th>
+                            <Th>{type === "credito" ? "Pago mensual" : "Interes mensual"}</Th>
+                            <Th>Accion</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -96,7 +129,7 @@ const Simulations = () => {
                                 <Td>{simulation.apr.toFixed(2)}%</Td>
                                 <Td>${simulation.monthlyPayment.toFixed(2)}</Td>
                                 <Td>
-                                    <Button size="sm" onClick={() => handleSave(simulation)}>Save</Button>
+                                    <Button size="sm" onClick={() => handleSave(simulation)}>Guardar</Button>
                                 </Td>
                             </Tr>
                         ))}
