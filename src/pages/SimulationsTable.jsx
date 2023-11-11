@@ -49,7 +49,7 @@ const SimulationsTable = () => {
                 return {
                     ...simulation,
                     period: event.target.value,
-                    monthly_rate: monthlyPaymentFormula(simulation.apr, simulation.amount, simulation.period),
+                    monthly_rate: interestEarnedFormula(simulation.apr, simulation.amount, simulation.period),
                 };
             } else {
                 return simulation;
