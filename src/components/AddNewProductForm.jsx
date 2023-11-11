@@ -10,7 +10,8 @@ import {
     Button,
     FormControl,
     FormLabel,
-    Input
+    Input,
+    Select  // Import Select from Chakra UI
 } from '@chakra-ui/react';
 import axios from 'axios';
 
@@ -57,10 +58,14 @@ const AddNewProductForm = ({ onClose, onProductAdded }) => {
                         </FormControl>
                         <FormControl isRequired mt={4}>
                             <FormLabel>Tipo</FormLabel>
-                            <Input name="type" value={newProduct.type} onChange={handleChange} />
+                            <Select name="type" value={newProduct.type} onChange={handleChange}>
+                                <option value="">Seleccione un tipo</option>
+                                <option value="credito">Crédito</option>
+                                <option value="inversion">Inversión</option>
+                            </Select>
                         </FormControl>
                         <FormControl isRequired mt={4}>
-                            <FormLabel>CAT (Costo Anual Total)</FormLabel>
+                            <FormLabel>Interés Anual</FormLabel>
                             <Input name="apr" value={newProduct.apr} onChange={handleChange} />
                         </FormControl>
                     </ModalBody>

@@ -81,7 +81,7 @@ const Products = () => {
                     <Th>Banco</Th>
                     <Th>Nombre</Th>
                     <Th>Tipo</Th>
-                    <Th isNumeric>CAT (%)</Th>
+                    <Th isNumeric>Interés Anual (%)</Th>
                     <Th>Acciones</Th>
                 </Tr>
             </Thead>
