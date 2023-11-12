@@ -46,10 +46,8 @@ const Simulations = () => {
             apr: simulation.apr,
             user: user ? user : "anonimo"
         }
-        console.log(body);
         try {
-            const result = await axios.post(`${process.env.REACT_APP_BASE_URL}/simulations`, body);
-            console.log(result);
+            await axios.post(`${process.env.REACT_APP_BASE_URL}/simulations`, body);
         } catch (error) {
             console.error('Error saving simulation:', error);
         }
