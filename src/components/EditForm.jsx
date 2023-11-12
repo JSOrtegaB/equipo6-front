@@ -24,23 +24,23 @@ const EditForm = ({ product, onClose, onSaveEditData }) => {
     return (
         <Box p="4">
             <FormControl id="bank" mb="4">
-                <FormLabel>Bank</FormLabel>
+                <FormLabel>Banco</FormLabel>
                 <Input name="bank" type="text" value={editedProduct.bank} onChange={handleChange} />
             </FormControl>
             <FormControl id="name" mb="4">
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Producto</FormLabel>
                 <Input name="name" type="text" value={editedProduct.name} onChange={handleChange} />
             </FormControl>
             <FormControl id="type" mb="4">
-                <FormLabel>Type</FormLabel>
+                <FormLabel>Tipo</FormLabel>
                 <Input name="type" type="text" value={editedProduct.type} onChange={handleChange} />
             </FormControl>
             <FormControl id="apr" mb="4">
-                <FormLabel>APR</FormLabel>
+                <FormLabel>Interés Anual</FormLabel>
                 <Input name="apr" type="number" value={editedProduct.apr} onChange={handleChange} />
             </FormControl>
-            <Button colorScheme="blue" mr="4" onClick={handleSubmit}>Save</Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button colorScheme="blue" mr="4" onClick={handleSubmit}>Guardar</Button>
+            <Button onClick={onClose}>Cancelar</Button>
         </Box>
     );
 };

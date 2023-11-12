@@ -34,7 +34,8 @@ const SimulationsTable = () => {
                 return {
                     ...simulation,
                     amount: event.target.value,
-                    monthly_rate: monthlyPaymentFormula(simulation.apr, simulation.amount, simulation.period),
+                    monthly_rate: simulation.type === "credito" ? monthlyPaymentFormula(simulation.apr / 1200, simulation.period, event.target.value) :
+                        interestEarnedFormula(event.target.value, simulation.apr / 1200, simulation.period)
                 };
             } else {
                 return simulation;
@@ -49,7 +50,8 @@ const SimulationsTable = () => {
                 return {
                     ...simulation,
                     period: event.target.value,
-                    monthly_rate: interestEarnedFormula(simulation.apr, simulation.amount, simulation.period),
+                    monthly_rate: simulation.type === "credito" ? monthlyPaymentFormula(simulation.apr / 1200, event.target.value, simulation.amount) :
+                        interestEarnedFormula(simulation.amount, simulation.apr / 1200, event.target.value)
                 };
             } else {
                 return simulation;
@@ -57,7 +59,7 @@ const SimulationsTable = () => {
         });
         setSimulations(newSimulations);
     };
-
+    //amount, monthlyRate, totalMonths
     const handleSave = async (simulation) => {
         const body = {
             apr: parseFloat(simulation.apr),
