@@ -37,7 +37,7 @@ const calculateEarnings = (products, amount, period) => {
 };
 
 const monthlyPaymentFormula = (monthlyRate, totalPayments, presentValue) => monthlyRate * presentValue / (1 - Math.pow(1 + monthlyRate, -totalPayments));
-const interestEarnedFormula = (amount, monthlyRate, totalMonths) => (amount * Math.pow(1 + monthlyRate, totalMonths)) - amount;
+const interestEarnedFormula = (amount, monthlyRate, totalMonths) => ((amount * Math.pow(1 + monthlyRate, totalMonths)) - amount) / totalMonths;
 
 
 export { calculatePayments, calculateEarnings, monthlyPaymentFormula, interestEarnedFormula };

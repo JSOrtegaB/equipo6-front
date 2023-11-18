@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, Select, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, Select, Table, Thead, Tbody, Tr, Th, Td, Container, Text, Stack } from '@chakra-ui/react';
 import axios from 'axios';
 import { calculatePayments, calculateEarnings } from '../formulas';
 
@@ -53,7 +53,33 @@ const Simulations = () => {
         }
     };
 
-    return (
+    return (<>
+        <Box
+            as="section"
+            width="80%"
+        >
+            <Container>
+                <Box
+                    bg="bg.surface"
+                    px={{
+                        base: '4',
+                        md: '3',
+                    }}
+                    width="100%"
+                    boxShadow="md"
+                    borderRadius="lg"
+                >
+                    <Stack spacing="1">
+
+                        <Text textStyle="sm" color="fg.muted">
+                            Selecciona el tipo de operación que deseas realizar, creditos o inversión y el monto que deseas solicitar o invertir.
+                            Luego presiona el botón Cálcular para obtener los resultados.
+                            Al finalizar la simulación, presiona el botón para Guardar los que te interesen para guardar la simulación en la base de datos.
+                        </Text>
+                    </Stack>
+                </Box>
+            </Container>
+        </Box>
         <Box p="4">
             <form onSubmit={handleSubmit}>
                 <FormControl isRequired>
@@ -100,6 +126,7 @@ const Simulations = () => {
                 </Table>
             )}
         </Box>
+    </>
     );
 };
 
