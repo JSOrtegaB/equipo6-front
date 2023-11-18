@@ -81,6 +81,7 @@ const Simulations = () => {
                 });
             })
             .catch(error => {
+                //console.log(error);
 
                 toast({
                     title: "Error de accesso",

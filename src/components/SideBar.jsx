@@ -4,27 +4,23 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const Sidebar = () => {
-    // Replace 'YourUsername' with dynamic username if available
-    const { user, login, logout } = useContext(AuthContext);
-    const username = user?.email;
-    console.log("User en sidebar: ", user);
+    const { user, logout } = useContext(AuthContext);
+    const username = user?.name;
 
-    // Logout function - implement the logic for logging out
+    // Logout function
     const handleLogout = () => {
-        console.log('Logout clicked');
         logout();
     };
 
     return (
-        <Box position="fixed" left="0" p="5" w="200px" h="100vh">
+        <Box position="fixed" left="0" p="5" w="17%" h="100vh">
             <Flex direction="column" h="100%">
                 <Stack spacing="4">
-                    {/* Existing Links */}
                     <Link as={RouterLink} to="/start">Inicio</Link>
                     <Link as={RouterLink} to="/products">Productos Financieros</Link>
                     <Link as={RouterLink} to="/sim">Simulaciones</Link>
                     {user && <Link as={RouterLink} to="/sim-table">Simulaciones Guardadas</Link>}
-                    <Link as={RouterLink} to="/reports">Reportes</Link>
+                    {user && <Link as={RouterLink} to="/reports">Reportes</Link>}
                 </Stack>
 
                 {/* Spacer to push the rest to the bottom */}
