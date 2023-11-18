@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td, Button, Box, Input } from '@chakra-ui/react';
 import axios from 'axios';
 import { monthlyPaymentFormula, interestEarnedFormula } from '../formulas';
+import { AuthContext } from '../context/AuthContext';
 
 const SimulationsTable = () => {
     const [simulations, setSimulations] = useState([]);
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchSimulations = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/simulations`);
+                const encodedEmail = encodeURIComponent("='" + user.email + "'");
+                const where = user ? `?where=user${encodedEmail}` : "";
+                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/simulations${where}`);
+                console.log("Tamaño de objeto: ", response.data.length);
                 setSimulations(response.data);
             } catch (error) {
                 console.error('Error fetching simulations:', error);

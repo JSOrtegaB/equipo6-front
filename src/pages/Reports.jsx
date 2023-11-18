@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Heading } from '@chakra-ui/react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { AuthContext } from '../context/AuthContext';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const Reports = () => {
     const [investmentData, setInvestmentData] = useState({ datasets: [] });
     const [creditData, setCreditData] = useState({ datasets: [] });
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchSimulations = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/simulations`);
+                const encodedEmail = encodeURIComponent("='" + user.email + "'");
+                const where = user ? `?where=user${encodedEmail}` : "";
+                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/simulations${where}`);
                 processData(response.data);
             } catch (error) {
                 console.error('Error fetching simulations:', error);

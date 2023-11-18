@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, Select, Table, Thead, Tbody, Tr, Th, Td, Container, Text, Stack } from '@chakra-ui/react';
+import React, { useState, useEffect, useContext, } from 'react';
+import { Box, Button, Center, FormControl, FormLabel, Input, Select, Table, Thead, Tbody, Tr, Th, Td, Container, Text, Stack, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import { calculatePayments, calculateEarnings } from '../formulas';
 import { AuthContext } from '../context/AuthContext';
@@ -21,9 +21,9 @@ const Simulations = () => {
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
     const { user, login } = useContext(AuthContext);
 
+    const toast = useToast();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -56,7 +56,7 @@ const Simulations = () => {
             product: simulation.name,
             bank: simulation.bank,
             apr: simulation.apr,
-            user: user ? user : "anonimo"
+            user: user ? user.email : "anonimo"
         };
         try {
             await axios.post(`${process.env.REACT_APP_BASE_URL}/simulations`, body);
@@ -68,15 +68,28 @@ const Simulations = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        Backendless.UserService.login(username, password, true).then(user => {
-            login(user);
-            setShowLoginForm(false);
-            console.log("User", user);
-        }).catch(error => {
-            setError(error)
-        });
+        Backendless.UserService.login(username, password, true)
+            .then(user => {
+                login(user);
+                setShowLoginForm(false);
+                toast({
+                    title: "Accesso exitoso",
+                    description: "Bienvenido " + user.email + "!",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            })
+            .catch(error => {
 
-
+                toast({
+                    title: "Error de accesso",
+                    description: "Usuario o contraseña incorrectos",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            });
     };
 
     return (
@@ -144,18 +157,19 @@ const Simulations = () => {
             {showLoginForm ? (
                 <form onSubmit={handleLogin}>
                     <FormControl isRequired>
-                        <FormLabel>Username</FormLabel>
+                        <FormLabel>Usuario</FormLabel>
                         <Input type="text" onChange={(e) => setUsername(e.target.value)} />
                     </FormControl>
                     <FormControl isRequired mt="4">
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Contraseña</FormLabel>
                         <Input type="password" onChange={(e) => setPassword(e.target.value)} />
                     </FormControl>
-                    <Button mt="4" type="submit">Login</Button>
+                    <Button mt="4" type="submit">Accessar</Button>
                 </form>
             ) : (
-                !user && <Button mt="4" onClick={() => setShowLoginForm(true)}>Login</Button>
-            )}
+
+                !user && <Center><Button bg='green' color='white' mt="4" onClick={() => setShowLoginForm(true)}>Para por guardar sus simulaciones por favor ingrese con su cuenta haciendo click en este mensaje</Button>
+                </Center>)}
         </Box>
     );
 };
