@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, Select, Table, Thead, Tbody, Tr, Th, Td, Container, Text, Stack } from '@chakra-ui/react';
 import axios from 'axios';
 import { calculatePayments, calculateEarnings } from '../formulas';
+import { AuthContext } from '../context/AuthContext';
 
 const Simulations = () => {
     const [products, setProducts] = useState([]);
@@ -9,10 +10,12 @@ const Simulations = () => {
     const [amount, setAmount] = useState('');
     const [period, setPeriod] = useState('');
     const [simulations, setSimulations] = useState([]);
-    const [user, setUser] = useState(null);
+    const [showLoginForm, setShowLoginForm] = useState(false);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const { user, login } = useContext(AuthContext);
 
     useEffect(() => {
-        // Fetch products initially
         const fetchProducts = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/products`);
@@ -30,9 +33,8 @@ const Simulations = () => {
             const calculatedSimulations = calculatePayments(products, amount, period);
             setSimulations(calculatedSimulations);
         } else {
-            console.log("Entro a calcular inversion");
-            const calculateEarningspayments = calculateEarnings(products, amount, period);
-            setSimulations(calculateEarningspayments);
+            const calculatedEarnings = calculateEarnings(products, amount, period);
+            setSimulations(calculatedEarnings);
         }
     };
 
@@ -45,7 +47,7 @@ const Simulations = () => {
             bank: simulation.bank,
             apr: simulation.apr,
             user: user ? user : "anonimo"
-        }
+        };
         try {
             await axios.post(`${process.env.REACT_APP_BASE_URL}/simulations`, body);
         } catch (error) {
@@ -53,80 +55,95 @@ const Simulations = () => {
         }
     };
 
-    return (<>
-        <Box
-            as="section"
-            width="80%"
-        >
-            <Container>
-                <Box
-                    bg="bg.surface"
-                    px={{
-                        base: '4',
-                        md: '3',
-                    }}
-                    width="100%"
-                    boxShadow="md"
-                    borderRadius="lg"
-                >
-                    <Stack spacing="1">
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { username, password });
+            login(response.data);
+            setShowLoginForm(false);
+        } catch (error) {
+            console.error('Error logging in:', error);
+        }
+    };
 
+    return (
+        <Box as="section" width="80%">
+            <Container>
+                <Box bg="bg.surface" px={{ base: '4', md: '3' }} width="100%" boxShadow="md" borderRadius="lg">
+                    <Stack spacing="1">
                         <Text textStyle="sm" color="fg.muted">
-                            Selecciona el tipo de operación que deseas realizar, creditos o inversión y el monto que deseas solicitar o invertir.
-                            Luego presiona el botón Cálcular para obtener los resultados.
+                            Selecciona el tipo de operación que deseas realizar, créditos o inversión y el monto que deseas solicitar o invertir.
+                            Luego presiona el botón Calcular para obtener los resultados.
                             Al finalizar la simulación, presiona el botón para Guardar los que te interesen para guardar la simulación en la base de datos.
                         </Text>
                     </Stack>
                 </Box>
             </Container>
-        </Box>
-        <Box p="4">
-            <form onSubmit={handleSubmit}>
-                <FormControl isRequired>
-                    <FormLabel>Tipo</FormLabel>
-                    <Select onChange={(e) => setType(e.target.value)}>
-                        <option value="credito">Credito</option>
-                        <option value="inversion">Inversion</option>
-                    </Select>
-                </FormControl>
-                <FormControl isRequired mt="4">
-                    <FormLabel>Cantidad</FormLabel>
-                    <Input type="number" onChange={(e) => setAmount(parseFloat(e.target.value))} />
-                </FormControl>
-                <FormControl isRequired mt="4">
-                    <FormLabel>Periodo (Meses)</FormLabel>
-                    <Input type="number" onChange={(e) => setPeriod(parseInt(e.target.value, 10))} />
-                </FormControl>
-                <Button mt="4" type="submit">Calcular</Button>
-            </form>
-            {simulations.length > 0 && (
-                <Table variant="simple" mt="6">
-                    <Thead>
-                        <Tr>
-                            <Th>Banco</Th>
-                            <Th>Producto</Th>
-                            <Th>{type === "credito" ? "CAT" : "Interes"}</Th>
-                            <Th>{type === "credito" ? "Pago mensual" : "Interes mensual"}</Th>
-                            <Th>Accion</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {simulations.map((simulation, index) => (
-                            <Tr key={index}>
-                                <Td>{simulation.bank}</Td>
-                                <Td>{simulation.name}</Td>
-                                <Td>{simulation.apr.toFixed(2)}%</Td>
-                                <Td>${simulation.monthlyPayment.toFixed(2)}</Td>
-                                <Td>
-                                    <Button size="sm" onClick={() => handleSave(simulation)}>Guardar</Button>
-                                </Td>
+
+            <Box p="4">
+                <form onSubmit={handleSubmit}>
+                    <FormControl isRequired>
+                        <FormLabel>Tipo</FormLabel>
+                        <Select onChange={(e) => setType(e.target.value)}>
+                            <option value="credito">Crédito</option>
+                            <option value="inversion">Inversión</option>
+                        </Select>
+                    </FormControl>
+                    <FormControl isRequired mt="4">
+                        <FormLabel>Cantidad</FormLabel>
+                        <Input type="number" onChange={(e) => setAmount(parseFloat(e.target.value))} />
+                    </FormControl>
+                    <FormControl isRequired mt="4">
+                        <FormLabel>Periodo (Meses)</FormLabel>
+                        <Input type="number" onChange={(e) => setPeriod(parseInt(e.target.value, 10))} />
+                    </FormControl>
+                    <Button mt="4" type="submit">Calcular</Button>
+                </form>
+
+                {simulations.length > 0 && (
+                    <Table variant="simple" mt="6">
+                        <Thead>
+                            <Tr>
+                                <Th>Banco</Th>
+                                <Th>Producto</Th>
+                                <Th>{type === "credito" ? "CAT" : "Interés"}</Th>
+                                <Th>{type === "credito" ? "Pago mensual" : "Interés mensual"}</Th>
+                                <Th>Acción</Th>
                             </Tr>
-                        ))}
-                    </Tbody>
-                </Table>
+                        </Thead>
+                        <Tbody>
+                            {simulations.map((simulation, index) => (
+                                <Tr key={index}>
+                                    <Td>{simulation.bank}</Td>
+                                    <Td>{simulation.name}</Td>
+                                    <Td>{simulation.apr.toFixed(2)}%</Td>
+                                    <Td>${simulation.monthlyPayment.toFixed(2)}</Td>
+                                    <Td>
+                                        <Button size="sm" onClick={() => handleSave(simulation)} isDisabled={!user}>Guardar</Button>
+                                    </Td>
+                                </Tr>
+                            ))}
+                        </Tbody>
+                    </Table>
+                )}
+            </Box>
+
+            {showLoginForm ? (
+                <form onSubmit={handleLogin}>
+                    <FormControl isRequired>
+                        <FormLabel>Username</FormLabel>
+                        <Input type="text" onChange={(e) => setUsername(e.target.value)} />
+                    </FormControl>
+                    <FormControl isRequired mt="4">
+                        <FormLabel>Password</FormLabel>
+                        <Input type="password" onChange={(e) => setPassword(e.target.value)} />
+                    </FormControl>
+                    <Button mt="4" type="submit">Login</Button>
+                </form>
+            ) : (
+                !user && <Button mt="4" onClick={() => setShowLoginForm(true)}>Login</Button>
             )}
         </Box>
-    </>
     );
 };
 

@@ -5,10 +5,10 @@ import Sidebar from './SideBar';
 const LayoutWithSidebar = ({ children }) => {
     return (
         <Flex>
-            <Box w="15%" p="4">
+            <Box w="17%" p="4">
                 <Sidebar />
             </Box>
-            <Box w="85%" p="4">
+            <Box w="83%" p="4">
                 {children}
             </Box>
         </Flex>
