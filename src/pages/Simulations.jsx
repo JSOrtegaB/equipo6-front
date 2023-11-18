@@ -4,6 +4,14 @@ import axios from 'axios';
 import { calculatePayments, calculateEarnings } from '../formulas';
 import { AuthContext } from '../context/AuthContext';
 
+import Backendless from 'backendless';
+
+const APP_ID = process.env.REACT_APP_BACKENDLESS_APP_ID;
+const API_KEY = process.env.REACT_APP_BACKENDLESS_API_KEY;
+Backendless.serverURL = process.env.REACT_APP_BACKENDLESS_URL;
+Backendless.initApp(APP_ID, API_KEY);
+
+
 const Simulations = () => {
     const [products, setProducts] = useState([]);
     const [type, setType] = useState('credito');
@@ -13,7 +21,9 @@ const Simulations = () => {
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
     const { user, login } = useContext(AuthContext);
+
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -57,13 +67,16 @@ const Simulations = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, { username, password });
-            login(response.data);
+
+        Backendless.UserService.login(username, password, true).then(user => {
+            login(user);
             setShowLoginForm(false);
-        } catch (error) {
-            console.error('Error logging in:', error);
-        }
+            console.log("User", user);
+        }).catch(error => {
+            setError(error)
+        });
+
+
     };
 
     return (
